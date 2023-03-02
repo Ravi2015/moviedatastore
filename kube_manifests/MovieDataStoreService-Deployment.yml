@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: moviedatastore-microservice
+  labels:
+    app: moviedatastore-restapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moviedatastore-restapp
+  template:  
+    metadata:
+      labels: 
+        app: moviedatastore-restapp
+    spec:
+      initContainers:
+        - name: init-db
+          image: busybox:1.31
+          command: ['sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z mysql 3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";']      
+      containers:
+        - name: moviedatastore-restapp
+          image: baravi/moviedatastoreapp_image:0.0.1-SNAPSHOT 
+          imagePullPolicy: Always
+          ports: 
+            - containerPort: 8080          
+          env:
+            - name: DB_HOST
+              value: "mysql"            
+            - name: DB_PORT
+              value: "3306"            
+            - name: DB_NAME
+              value: "moviedatastore"            
+            - name: DB_USERNAME
+              value: "dbadmin"        # RDS DB Username is dbadmin     
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-db-password
+                  key: db-password           
+        
