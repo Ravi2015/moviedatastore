@@ -15,10 +15,10 @@ The REST API app is described below.
     curl -i -H 'Accept: application/json' http://localhost:8080/v1/save
 
     {
-    "title": "Top Gun",
-    "year": 1986,
-    "cast": ["Tom Cruise", "Kelly McGillis"],
-    "genres": ["Action"]
+        "title": "Top Gun",
+        "year": 1986,
+        "cast": ["Tom Cruise", "Kelly McGillis"],
+        "genres": ["Action"]
     }
 
 ### Response
@@ -32,10 +32,10 @@ The REST API app is described below.
     curl -i -H 'Accept: application/json' http://localhost:8080/v1/save
 
     {
-    "title": "Top Gun",
-    "year": 1986,
-    "cast": ["Tom Cruise", "Kelly McGillis"],
-    "genres": ["Action", "Adventure"]
+        "title": "Top Gun",
+        "year": 1986,
+        "cast": ["Tom Cruise", "Kelly McGillis"],
+        "genres": ["Action", "Adventure"]
     }
 
 ### Response
@@ -51,8 +51,8 @@ The REST API app is described below.
     curl -i -H 'Accept: application/json' http://localhost:8080/v1/search
 
     {
-    "genre": "Action",
-    "castMember": "Tom Cruise"
+        "genre": "Action",
+        "castMember": "Tom Cruise"
     }
 
 ### Response
