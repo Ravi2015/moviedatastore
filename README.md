@@ -42,7 +42,7 @@ The REST API app is described below.
 
     Status: 200 OK
 
-## Search based on any combination of title, year, cast member, genre
+## Search based on title, year, cast member, or genre
 
 ### Request
 
@@ -51,8 +51,37 @@ The REST API app is described below.
     curl -i -H 'Accept: application/json' http://localhost:8080/v1/search
 
     {
-        "genre": "Action",
-        "castMember": "Tom Cruise"
+        "searchBy": "title",
+        "value": "Mission Impossible"
+    }
+
+### Response
+
+    Status: 200 OK
+
+    [
+        {
+            "title": "Mission Impossible",
+            "year": 1996,
+            "cast": [
+                "Tom Cruise",
+                "Emmanuelle Beart"
+            ],
+            "genres": [
+                "Action"
+            ]
+        }
+    ]
+
+### Request
+
+`GET v1/search`
+
+    curl -i -H 'Accept: application/json' http://localhost:8080/v1/search
+
+    {
+        "searchBy": "castMember",
+        "value": "Tom Cruise"
     }
 
 ### Response
@@ -82,9 +111,26 @@ The REST API app is described below.
                 "Action",
                 "Adventure"
             ]
-        },
+        }
         ...
     ]
+
+### Request
+
+`GET v1/search`
+
+    curl -i -H 'Accept: application/json' http://localhost:8080/v1/search
+
+    {
+        "searchBy": "castMember",
+        "value": "John Doe"
+    }
+
+### Response
+
+    Status: 200 OK
+
+    []
 
 # Configuration
 

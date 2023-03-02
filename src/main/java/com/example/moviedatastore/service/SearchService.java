@@ -2,38 +2,64 @@ package com.example.moviedatastore.service;
 
 import com.example.moviedatastore.dto.MovieData;
 import com.example.moviedatastore.dto.SearchRequest;
-import com.example.moviedatastore.repository.CastMemberEntity;
-import com.example.moviedatastore.repository.GenreEntity;
-import com.example.moviedatastore.repository.MovieDataEntity;
-import com.example.moviedatastore.repository.MovieDataRepository;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import com.example.moviedatastore.jpa.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
 
     private final MovieDataRepository movieDataRepository;
+    private final CastMemberRepository castMemberRepository;
+    private final GenreRepository genreRepository;
 
-    public SearchService(MovieDataRepository movieDataRepository) {
+    public SearchService(MovieDataRepository movieDataRepository, CastMemberRepository castMemberRepository, GenreRepository genreRepository) {
+
         this.movieDataRepository = movieDataRepository;
+        this.castMemberRepository = castMemberRepository;
+        this.genreRepository = genreRepository;
     }
 
     public List<MovieData> getMovieData(SearchRequest request){
-        MovieDataEntity movieDataEntity = new MovieDataEntity();
-        movieDataEntity.setTitle(request.getTitle());
-        movieDataEntity.setMovieYear(request.getYear()>0?Integer.toString(request.getYear()):null);
-        GenreEntity genreEntity = new GenreEntity();
-        genreEntity.setGenre(request.getGenre());
-        movieDataEntity.setGenres(List.of(genreEntity));
-        CastMemberEntity castMemberEntity = new CastMemberEntity();
-        castMemberEntity.setCastMemberName(request.getCastMember());
-        movieDataEntity.setCastMembers(List.of(castMemberEntity));
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
-        List<MovieDataEntity> movieDataEntities = movieDataRepository.findAll(Example.of(movieDataEntity, matcher));
+
+        List<MovieDataEntity> movieDataEntities;
+
+        switch (request.getSearchBy()) {
+            case "title":
+                Optional<MovieDataEntity> optionalMovieDataEntity = movieDataRepository.findById(request.getValue());
+                if (optionalMovieDataEntity.isEmpty()){
+                    movieDataEntities = List.of();
+                } else {
+                    movieDataEntities = List.of(optionalMovieDataEntity.get());
+                }
+                break;
+            case "genre":
+                Optional<GenreEntity> optionalGenreEntity = genreRepository.findById(request.getValue());
+                if (optionalGenreEntity.isEmpty()) {
+                    movieDataEntities = List.of();
+                } else {
+                    movieDataEntities = optionalGenreEntity.get().getMovieDataEntities();
+                }
+                break;
+            case "castMember":
+                Optional<CastMemberEntity> optionalCastMemberEntity = castMemberRepository.findById(request.getValue());
+                if (optionalCastMemberEntity.isEmpty()) {
+                    movieDataEntities = List.of();
+                } else {
+                    movieDataEntities = optionalCastMemberEntity.get().getMovieDataEntities();
+                }
+                break;
+            case "year":
+                movieDataEntities = movieDataRepository.findAllByMovieYear(request.getValue());
+                break;
+            default:
+                movieDataEntities = List.of();
+                break;
+        }
+
         return movieDataEntities.stream()
                 .map(m -> {
                     MovieData movieData = new MovieData();

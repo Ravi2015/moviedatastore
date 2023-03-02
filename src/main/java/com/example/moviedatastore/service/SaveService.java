@@ -1,10 +1,10 @@
 package com.example.moviedatastore.service;
 
 import com.example.moviedatastore.dto.MovieData;
-import com.example.moviedatastore.repository.CastMemberEntity;
-import com.example.moviedatastore.repository.GenreEntity;
-import com.example.moviedatastore.repository.MovieDataEntity;
-import com.example.moviedatastore.repository.MovieDataRepository;
+import com.example.moviedatastore.jpa.CastMemberEntity;
+import com.example.moviedatastore.jpa.GenreEntity;
+import com.example.moviedatastore.jpa.MovieDataEntity;
+import com.example.moviedatastore.jpa.MovieDataRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

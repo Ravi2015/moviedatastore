@@ -3,41 +3,23 @@ package com.example.moviedatastore.dto;
 
 public class SearchRequest {
 
-    private String title;
-    private int year;
-    private String castMember;
-    private String genre;
+    private String searchBy;
+    private String value;
 
-    public String getTitle() {
-        return title;
+    public String getSearchBy() {
+        return searchBy;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setSearchBy(String searchBy) {
+        this.searchBy = searchBy;
     }
 
-    public int getYear() {
-        return year;
+    public String getValue() {
+        return value;
     }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getCastMember() {
-        return castMember;
-    }
-
-    public void setCastMember(String castMember) {
-        this.castMember = castMember;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setValue(String value) {
+        this.value = value;
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.moviedatastore.repository;
+package com.example.moviedatastore.jpa;
 
 import jakarta.persistence.*;
 
@@ -11,9 +11,9 @@ public class MovieDataEntity {
     @Id
     private String title;
     private String movieYear;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<CastMemberEntity> castMembers;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<GenreEntity> genres;
 
     public String getTitle() {
@@ -46,5 +46,15 @@ public class MovieDataEntity {
 
     public void setGenres(List<GenreEntity> genres) {
         this.genres = genres;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieDataEntity{" +
+                "title='" + title + '\'' +
+                ", movieYear='" + movieYear + '\'' +
+                ", castMembers=" + castMembers +
+                ", genres=" + genres +
+                '}';
     }
 }
